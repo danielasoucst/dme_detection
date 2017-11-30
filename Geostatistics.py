@@ -1,7 +1,7 @@
 # coding: utf-8
 import numpy as np
 
-
+import math
 
 # Função que calcula as estatisticas semivariograma, semimadograma, correlograma e covariograma
 # Recebe: img - imagem original
@@ -37,7 +37,6 @@ def run(img, windowSize):
             parcial = computeAll(img, xStart, yStart, direction, distance, windowSize)
 
             resultados.append(parcial[0])
-
             resultados.append(parcial[1])
             resultados.append(parcial[2])
             resultados.append(parcial[3])
@@ -73,7 +72,7 @@ def computeAll(img, xStart, yStart,direction,  distance,  windowSize):
 
 
     janela = computeWindow(xStart, yStart, windowSize, direction, distance)
-
+    # print ('dim janela',janela)
     # // cout << endl << meanV[0] << " " << meanV[1] << " " << meanV[2];
 
 
@@ -86,23 +85,27 @@ def computeAll(img, xStart, yStart,direction,  distance,  windowSize):
     for y in range(janela[2],janela[3]):
         for x in range(janela[0], janela[1]):
 
-            v1 = int(img[x][y])
-            v2 = int(img[x + janela[4]][y + janela[5]])
-
-
+            v1 = img[x][y]
+            v2 = img[x + janela[4]][y + janela[5]]
 
             difference = abs( v1 - v2 )
+
+
+            if(math.isnan(v1) or math.isnan(v2)):
+                print ('janela, ', v1,v2)
             # difference2 = v1 - v2;
             #     variance   = difference2 *
             variance = difference*difference
             mult     = ( v1 * v2 ) - mean
-
+            # print v1,v2
+            if(math.isnan(v1) or math.isnan(v2) ):
+                print ( 'NAn merma',  x,y,x + janela[4],y + janela[5])
             sdV1 += (v1 - meanV[0]) * (v1 - meanV[0])
             sdV2 += (v2 - meanV[1]) * (v2 - meanV[1])
 
             smV += variance
             smM += difference
-            coV += mult;
+            coV += mult
             N += 1
     # end for
 
@@ -211,5 +214,5 @@ def computeWindow(centerx,  centery,  windowSize,  direction, distance):
     janela.append(yEnd)
     janela.append(xDistance)
     janela.append(yDistance)
-    print janela,direction,distance
+    # print janela,direction,distance
     return janela
