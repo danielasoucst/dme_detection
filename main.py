@@ -24,19 +24,14 @@ def extractFeatures(sujeito):
     lstImagens = input.load_image('./base_interpol/' + sujeito)
 
     lstGeoFeatures = []
-    frame = 0
+
     for imagem in lstImagens:
         imagem = np.asarray(imagem)
         frame_denoise = input.apply_filter(imagem, 'anisotropic')
         bdValue, new = flatten.flat_image(frame_denoise)
         crop = cropping.croppy_mona(new, bdValue)
-        print('FRAME ',frame)
-        if(frame==3):
-            img = Image.fromarray(crop)
-            print crop[76][1]
-            img.show()
         lstGeoFeatures.append(geo.run((crop),[crop.shape[0],crop.shape[1]]))
-        frame+=1
+
     print('geo',len(lstGeoFeatures),len(lstGeoFeatures[0]))
     # dictionary = features_extraction.apply_BOW(lstSIFTFeatures)
     fileObject = open('./geo_features/'+sujeito, 'wb')
@@ -94,21 +89,19 @@ def loadFeatures():
 # loadFeatures()
 # import math
 
+lstImagens = input.load_image('./base_interpol/DME7')
+imagem = lstImagens[2]
+# print  lstImagens[3][79][1]
+# print  lstImagens[3][76][0]
+# map(lambda x: x if x<255 else 0, imagem)
 
 
+imagem = np.asarray(imagem)
+frame_denoise = input.apply_filter(imagem, 'anisotropic')
+bdValue, new = flatten.flat_image(frame_denoise)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+crop = cropping.croppy_mona(new, bdValue)                                                                                      
+plt.figure()
+plt.subplot(121)
+plt.imshow(crop, 'gray')
+plt.show()

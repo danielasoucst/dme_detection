@@ -49,7 +49,8 @@ def flat_image(image):
     '''definimos a linha horizontal q representará o limite inferior'''
     limit = []
     if (len(pilot_rpe) > 0):
-        ele = abs(max(pilot_rpe)-min(pilot_rpe))/2
+        # ele = abs(max(pilot_rpe)-min(pilot_rpe))/2
+        ele = max(pilot_rpe)
         limit = [ele for x in xrange(0, len(pilot_rpe))]
 
     poly = find_polynomial(list_x, pilot_rpe,len(list_x))
